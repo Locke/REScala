@@ -26,17 +26,21 @@ jobs:
     - name: install jsdom
       run: npm install jsdom
 
+    # makes sure no old sbt server instance is running
+    - name: Start/reboot sbt server
+      run: sbt --client reboot
+
     # Compile all modules, before starting any tests.
     # Compilation should not fail spuriously, therefore fail the overall test and don't retry compilation.
     - name: Compile
-      run: sbt Test/compile
+      run: sbt --client Test/compile
 
     # Run tests once, but allow failures.
     # Some tests may fail spuriously, therefore continue on error and retry with the next step
     - name: Run tests
       continue-on-error: true
-      run: sbt test
+      run: sbt --client test
 
     # Run all failed test cases, this time failing the overall test
     - name: Run tests again for added reliability
-      run: sbt testQuick
+      run: sbt --client testQuick
