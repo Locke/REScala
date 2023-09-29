@@ -18,6 +18,7 @@ import todo.Todolist.replicaId
 
 import scala.Function.const
 import scala.collection.mutable
+import scala.concurrent.Future
 import scala.scalajs.js.timers.setTimeout
 
 case class TaskData(
@@ -66,7 +67,8 @@ object TaskReferences {
     taskrefs
   }
 
-  val taskBinding = Binding[DeltaFor[LastWriterWins[Option[TaskData]]] => Unit]("todo task")
+  val taskBinding: Binding[DeltaFor[LastWriterWins[Option[TaskData]]] => Unit, DeltaFor[LastWriterWins[Option[TaskData]]] => Future[Unit]]
+    = Binding[DeltaFor[LastWriterWins[Option[TaskData]]] => Unit]("todo task")
   val taskReplicator =
     given Bottom[LastWriterWins[Option[TaskData]]] with {
       override def empty: LastWriterWins[Option[TaskData]] = null
